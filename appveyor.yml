@@ -1,0 +1,26 @@
+image: Ubuntu
+
+stack: jdk 11
+clone_depth: 1
+pull_requests:
+  do_not_increment_build_number: true
+
+branches:
+  only:
+    - master
+
+build: off
+
+install:
+  - sudo curl -L "https://github.com/docker/compose/releases/download/1.28.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+  - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+
+build_script:
+  - docker-compose up -d
+  - sleep 30
+  - java -Dspring.datasource.url=jdbc:mysql://localhost:3306/app -jar artifacts/aqa-shop.jar &
+  - sleep 10
+  - chmod +x gradlew
+  - ./gradlew clean test -Ddb.url=jdbc:mysql://localhost:3306/app -Dselenide.headless=true
