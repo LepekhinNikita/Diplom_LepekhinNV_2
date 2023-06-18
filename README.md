@@ -14,12 +14,11 @@
 5. Запуск тестов (Allure)
 -  для запуска на MySQL ввести команду
 
-``` gradlew clean test -Ddb.url=jdbc:mysql://localhost:3306/app allureReport ```
+``` ./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app" ```
 
 - для запуска на PostgreSQ ввести команду
 
-``` gradlew clean test -Ddb.url=jdbc:postgresql://localhost:5432/app allureReport ```
+``` ./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app" ```
 
-6. Открыть в Google Chrome сслыку http://localhost:8080
-7. Для получения отчета Allure в браузере ввести команду ``` gradlew allureServe ```
-8. После окончания тестов завершить работу приложения (Ctrl+C), остановить контейнеры командой ``` docker-compose down ```
+6. Для получения отчета Allure в браузере ввести команду ``` ./gradlew allureServe ```
+7. После окончания тестов завершить работу приложения (Ctrl+C), остановить контейнеры командой ``` docker-compose down ```
