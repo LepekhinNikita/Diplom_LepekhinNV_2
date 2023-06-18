@@ -1,7 +1,9 @@
 plugins {
     id 'java'
     id "io.freefair.lombok" version "5.3.0"
+    id 'io.qameta.allure' version '2.11.2'
 }
+
 
 group 'ru.netogy'
 version '1.0-SNAPSHOT'
@@ -9,24 +11,25 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 11
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
+allure {
+    version = '2.20.1'
+    useJUnit5 {
+        version = '2.20.1'
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     testImplementation 'com.codeborne:selenide:5.19.0'
-    testImplementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
     testImplementation 'io.qameta.allure:allure-selenide:2.13.0'
-    testImplementation 'mysql:mysql-connector-java:8.0.22'
-    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
-    testImplementation 'io.rest-assured:rest-assured:4.3.0'
-    testImplementation 'io.qameta.allure:allure-selenide:2.13.0'
+    testImplementation 'io.rest-assured:rest-assured:5.2.0'
 
 }
 

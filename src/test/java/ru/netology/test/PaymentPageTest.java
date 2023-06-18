@@ -2,7 +2,6 @@ package ru.netology.test;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import lombok.val;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +23,8 @@ public class PaymentPageTest {
 
     @BeforeEach
     void setUp() {
-        open("http://localhost:8080");
-        DbUtils.clearTables();
+        String url = System.getProperty("sut.url");
+        open(url);
     }
 
     @AfterAll
@@ -36,9 +35,9 @@ public class PaymentPageTest {
     @Test
     void shouldBuyInPaymentGate() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkSuccessNotification();
         assertEquals("APPROVED", DbUtils.getPaymentStatus());
@@ -47,9 +46,9 @@ public class PaymentPageTest {
     @Test
     void shouldBuyInPaymentGateWithNameInLatinLetters() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidNameInLatinLetters(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkSuccessNotification();
         assertEquals("APPROVED", DbUtils.getPaymentStatus());
@@ -58,9 +57,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithDeclinedCardNumber() {
         Card card = new Card(getDeclinedNumber(), getCurrentMonth(), getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkDeclineNotification();
         assertEquals("DECLINED", DbUtils.getPaymentStatus());
@@ -69,9 +68,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithInvalidCardNumber() {
         Card card = new Card(getInvalidCardNumber(), getCurrentMonth(), getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkDeclineNotification();
 
@@ -80,9 +79,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithShortCardNumber() {
         Card card = new Card(getShortCardNumber(), getCurrentMonth(), getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidFormat();
     }
@@ -90,9 +89,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithEmptyCardNumber() {
         Card card = new Card(null, getCurrentMonth(), getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkRequiredField();
     }
@@ -100,9 +99,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithInvalidMonth() {
         Card card = new Card(getApprovedNumber(), "00", getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidDate();
     }
@@ -110,9 +109,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithNonExistingMonth() {
         Card card = new Card(getApprovedNumber(), "13", getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidDate();
 
@@ -121,9 +120,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithExpiredMonth() {
         Card card = new Card(getApprovedNumber(), getLastMonth(), getCurrentYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkExpiredDate();
     }
@@ -131,9 +130,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithEmptyMonth() {
         Card card = new Card(getApprovedNumber(), null, getNextYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkRequiredField();
     }
@@ -142,9 +141,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithExpiredYear() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getLastYear(), getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkExpiredDate();
     }
@@ -152,9 +151,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithEmptyYear() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), null, getValidName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkRequiredField();
     }
@@ -163,9 +162,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithOnlyName() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getOnlyName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidName();
     }
@@ -173,9 +172,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithOnlyNameInLatinLetters() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getOnlyNameInLatinLetters(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidName();
     }
@@ -183,9 +182,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithOnlySurname() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getOnlySurname(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidName();
     }
@@ -193,9 +192,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithOnlySurnameInLatinLetters() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getOnlySurnameInLatinLetters(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidName();
     }
@@ -203,9 +202,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithNameAndSurnameWithDash() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), "Иван-Иванов", getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidFormat();
     }
@@ -213,9 +212,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithTooLongName() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getTooLongName(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkLongName();
     }
@@ -223,9 +222,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithDigitsInName() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getNameWithNumbers(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidDataName();
     }
@@ -233,9 +232,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithTooShortName() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getNameWithOneLetter(), getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkShortName();
     }
@@ -243,9 +242,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithEmptyName() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), null, getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkRequiredField();
     }
@@ -253,9 +252,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithSpaceInsteadOfName() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), " ", getValidCvc());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidDataName();
     }
@@ -263,9 +262,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithOneDigitInCvc() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidName(), getCvcWithOneDigit());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidCvc();
     }
@@ -273,9 +272,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithTwoDigitsInCvc() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidName(), getCvcWithTwoDigits());
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkInvalidCvc();
     }
@@ -283,9 +282,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithEmptyCvc() {
         Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidName(), null);
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkRequiredField();
     }
@@ -294,9 +293,9 @@ public class PaymentPageTest {
     @Test
     void shouldNotBuyInPaymentGateWithAllEmptyFields() {
         Card card = new Card(null, null, null, null, null);
-        val beginPage = new BeginPage();
+        var beginPage = new BeginPage();
         beginPage.buy();
-        val paymentPage = new PaymentPage();
+        var paymentPage = new PaymentPage();
         paymentPage.fulfillData(card);
         paymentPage.checkAllFieldsAreRequired();
     }

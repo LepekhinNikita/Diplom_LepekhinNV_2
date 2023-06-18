@@ -52,10 +52,12 @@ public class DataGenerator {
         LocalDate localDate = LocalDate.now();
         return String.format("%ty", localDate.minusYears(1));
     }
+
     public static String getNextYear() {
         LocalDate localDate = LocalDate.now();
         return String.format("%ty", localDate.plusYears(1));
     }
+
     public static String getValidName() {
         Faker faker = new Faker(new Locale("ru"));
         return faker.name().firstName() + " " + faker.name().lastName();

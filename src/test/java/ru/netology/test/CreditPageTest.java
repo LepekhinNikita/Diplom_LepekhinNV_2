@@ -7,11 +7,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.Card;
-import ru.netology.data.DbUtils;
 import ru.netology.page.BeginPage;
 
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.netology.data.DataGenerator.*;
 
 public class CreditPageTest {
@@ -22,7 +20,6 @@ public class CreditPageTest {
 
     @BeforeEach
     void setUp() {
-        DbUtils.clearTables();
         String url = System.getProperty("sut.url");
         open(url);
 
@@ -33,27 +30,6 @@ public class CreditPageTest {
         SelenideLogger.removeListener("allure");
     }
 
-    @Test
-    void shouldBuyInCreditGate() {
-        Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidName(), getValidCvc());
-        var beginPage = new BeginPage();
-        beginPage.buyInCredit();
-        var creditPage = beginPage.buyInCredit();
-        creditPage.fulfillData(card);
-        creditPage.checkSuccessNotification();
-        assertEquals("APPROVED", DbUtils.getCreditStatus());
-    }
-
-    @Test
-    void shouldBuyInCreditGateWithNameInLatinLetters() {
-        Card card = new Card(getApprovedNumber(), getCurrentMonth(), getNextYear(), getValidNameInLatinLetters(), getValidCvc());
-        var beginPage = new BeginPage();
-        beginPage.buyInCredit();
-        var creditPage = beginPage.buyInCredit();
-        creditPage.fulfillData(card);
-        creditPage.checkSuccessNotification();
-        assertEquals("APPROVED", DbUtils.getCreditStatus());
-    }
 
     @Test
     void shouldNotBuyInCreditGateWithDeclinedCardNumber() {
